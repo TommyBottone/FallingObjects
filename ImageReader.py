@@ -1,8 +1,6 @@
 from PIL import Image
-import numpy as np
 import os
 from PIL.ExifTags import TAGS, GPSTAGS
-import threading
 
 
 class XY:
@@ -30,10 +28,6 @@ class XY:
 
 
 class ImageMetaData:
-    #the color locations in the array
-    _r = 0
-    _g = 1
-    _b = 2
     #stored color to ignore
     _ignoreR = 0
     _ignoreG = 0
@@ -54,8 +48,6 @@ class ImageMetaData:
                 if valr == self._ignoreR and valg == self._ignoreG and valb == self._ignoreB:
                     continue
                 else:
-                    print(x, y, valr, valg, valb, self._ignoreR, self._ignoreG,
-                          self._ignoreB)
                     self._bottomRight.setX(x)
                     self._bottomRight.setY(y)
                     return
@@ -74,13 +66,11 @@ class ImageMetaData:
                     if valr == self._ignoreR and valg == self._ignoreG and valb == self._ignoreB:
                         continue
                     else:
-                        print(x, y, valr, valg, valb, self._ignoreR,
-                              self._ignoreG, self._ignoreB)
                         self._topLeft.setX(x)
                         self._topLeft.setY(y)
                         return
 
-    def findRectangle(self, imagename):
+    def _findRectangle(self, imagename):
         #assume 0,0 is fine
         self._ignoreR, self._ignoreG, self._ignoreB = self._rgb_image.getpixel(
             (0, 0))
@@ -116,8 +106,11 @@ class ImageMetaData:
                 data = data.decode()
             print(f"{tag:30}: {data}")
 
-        self.findRectangle(imagename)
-        imgcrop = self._image.crop((self._topLeft.getX(),self._topLeft.getY(), self._bottomRight.getX(),self._bottomRight.getY()))
+        self._findRectangle(imagename)
+        imgcrop = self._image.crop(
+            (self._topLeft.getX(), self._topLeft.getY(),
+             self._bottomRight.getX(), self._bottomRight.getY()))
         cropname = os.path.splitext(imagename)[0]
         cropname = cropname + "copy.jpg"
         imgcrop.save(cropname)
+        print("Done! File: " + cropname)
