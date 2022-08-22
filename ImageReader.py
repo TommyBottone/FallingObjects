@@ -45,7 +45,11 @@ class ImageMetaData:
         for x in reversed(range(width)):
             for y in reversed(range(height)):
                 valr, valg, valb = self._rgb_image.getpixel((x, y))
-                if valr == self._ignoreR and valg == self._ignoreG and valb == self._ignoreB:
+                if valr in range(self._ignoreR - 5,
+                                 self._ignoreR + 5) and valg in range(
+                                     self._ignoreG - 5,
+                                     self._ignoreG + 5) and valb in range(
+                                         self._ignoreB - 5, self._ignoreB + 5):
                     continue
                 else:
                     self._bottomRight.setX(x)
@@ -63,7 +67,12 @@ class ImageMetaData:
                     continue
                 else:
                     valr, valg, valb = self._rgb_image.getpixel((x, y))
-                    if valr == self._ignoreR and valg == self._ignoreG and valb == self._ignoreB:
+                    if valr in range(self._ignoreR - 5,
+                                     self._ignoreR + 5) and valg in range(
+                                         self._ignoreG - 5,
+                                         self._ignoreG + 5) and valb in range(
+                                             self._ignoreB - 5,
+                                             self._ignoreB + 5):
                         continue
                     else:
                         self._topLeft.setX(x)
