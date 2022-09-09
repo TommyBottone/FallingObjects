@@ -91,6 +91,9 @@ class ImageMetaData:
         return
 
     def readImage(self, imagename):
+        if not os.path.exists(imagename):
+          print ("COULD NOT FIND FILE ", imagename)
+          return
         self._image = Image.open(imagename)
         self._rgb_image = self._image.convert('RGB')
         info_dict = {
